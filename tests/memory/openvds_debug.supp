@@ -1,9 +1,0 @@
-{
-   Samples, Traces and Subset: From VolumeDataAccessManagerImpl.cpp:373: VolumeDataPageAccessorImpl *pageAccessor = new VolumeDataPageAccessorImpl(...)
-   Memcheck:Leak
-   match-leak-kinds: definite
-   fun:_Znwm
-   fun:_ZN7OpenVDS27VolumeDataAccessManagerImpl28CreateVolumeDataPageAccessorEPKNS_15VolumeDataLayerENS_16VolumeDataFormatEbfiNS_22VolumeDataPageAccessor10AccessModeE
-   fun:_ZN7OpenVDS27VolumeDataAccessManagerImpl43CreateVolumeDataPageAccessorConversionParamENS_12DimensionsNDEiiNS_16VolumeDataFormatEbfiNS_22VolumeDataPageAccessor10AccessModeEi
-   fun:_ZN7OpenVDS26VolumeDataRequestProcessor6AddJobERKSt6vectorINS_15VolumeDataChunkESaIS2_EENS_16VolumeDataFormatESt4pairIbfESt8functionIFbPNS_18VolumeDataPageImplERKS2_RNS_8VDSErrorEEEb
-}

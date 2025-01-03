@@ -1,27 +1,30 @@
-From c1c42126af4ac3e78e04a22e25c644f6560aaee8 Mon Sep 17 00:00:00 2001
-Message-ID: <c1c42126af4ac3e78e04a22e25c644f6560aaee8.1735910046.git.alec@equinor.com>
+From 2b75ddd19a3419833537ca0fd26b1b5da202fb62 Mon Sep 17 00:00:00 2001
+Message-ID: <2b75ddd19a3419833537ca0fd26b1b5da202fb62.1735913441.git.alec@equinor.com>
 From: Alena Chaikouskaya <alec@equinor.com>
 Date: Fri, 3 Jan 2025 14:07:05 +0100
 Subject: [PATCH] Delete pages
 
 ---
- src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp | 4 ++++
- 1 file changed, 4 insertions(+)
+ src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp b/src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp
-index 78b9c86a..06fb8f5a 100644
+index 78b9c86a..5ad76af1 100644
 --- a/src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp
 +++ b/src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp
-@@ -68,6 +68,10 @@ VolumeDataPageAccessorImpl::VolumeDataPageAccessorImpl(VolumeDataAccessManagerIm
- 
- VolumeDataPageAccessorImpl::~VolumeDataPageAccessorImpl()
- {
-+  for (auto page : m_pages)
+@@ -74,6 +74,13 @@ VolumeDataPageAccessorImpl::~VolumeDataPageAccessorImpl()
+     m_pages_lru.Remove(page);
+     delete page;
+   }
++  for (auto it = m_pages.begin(); it != m_pages.end(); ++it)
 +  {
-+    delete page.second;
++    if (it->second)
++    {
++      throw std::runtime_error("Page not deleted");
++    }
 +  }
-   m_pages.clear();
-   while(auto page = m_pages_lru.GetFirstItem())
+ 
+   if(m_parentVolumeDataPageAccessor)
    {
 -- 
 2.43.0
