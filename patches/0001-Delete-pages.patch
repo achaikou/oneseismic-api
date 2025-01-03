@@ -1,16 +1,16 @@
-From b117d0e9bd9d57e8d86da92b1fb1e9443360d206 Mon Sep 17 00:00:00 2001
-Message-ID: <b117d0e9bd9d57e8d86da92b1fb1e9443360d206.1735924653.git.alec@equinor.com>
+From 41b1e965e202af8d532bdfe75ba873a862538f16 Mon Sep 17 00:00:00 2001
+Message-ID: <41b1e965e202af8d532bdfe75ba873a862538f16.1735925682.git.alec@equinor.com>
 From: Alena Chaikouskaya <alec@equinor.com>
 Date: Fri, 3 Jan 2025 14:07:05 +0100
 Subject: [PATCH] Delete pages
 
 ---
  src/OpenVDS/OpenVDS/VolumeDataAccessManager.h   |  8 +++++++-
- src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp |  8 ++++++++
+ src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp | 10 +++++++++-
  src/OpenVDS/VDS/VolumeDataAccessor.cpp          |  2 ++
  src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp  | 10 ++++++++++
  src/OpenVDS/VDS/VolumeDataRequestProcessor.cpp  |  9 +++++++++
- 5 files changed, 36 insertions(+), 1 deletion(-)
+ 5 files changed, 37 insertions(+), 2 deletions(-)
 
 diff --git a/src/OpenVDS/OpenVDS/VolumeDataAccessManager.h b/src/OpenVDS/OpenVDS/VolumeDataAccessManager.h
 index 284d6cb0..b5e1b2d0 100644
@@ -48,7 +48,7 @@ index 284d6cb0..b5e1b2d0 100644
      VolumeDataPageAccessor *volumeDataPageAccessor = m_IVolumeDataAccessManager->CreateVolumeDataPageAccessor(dimensionsND, LOD, channel, maxPages, AccessMode_ReadOnly);
      return VolumeData3DReadAccessorR32(m_IVolumeDataAccessManager->Create3DVolumeDataAccessorR32(volumeDataPageAccessor, replacementNoValue.value_or(volumeDataPageAccessor->GetChannelDescriptor().GetNoValue())));
 diff --git a/src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp b/src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp
-index a28a52e9..6e63fbba 100644
+index a28a52e9..684f255a 100644
 --- a/src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp
 +++ b/src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp
 @@ -35,6 +35,7 @@
@@ -67,6 +67,19 @@ index a28a52e9..6e63fbba 100644
    if (m_uploadErrors.errors.size())
    {
      m_vds.logger.LogWarning("VolumeDataAccessManager destructor: there where upload errors");
+@@ -115,11 +117,11 @@ VolumeDataAccessManagerImpl::Invalidate()
+ {
+   std::unique_lock<std::mutex> lock(m_mutex);
+   m_invalidated = true;
+-  m_requestProcessor.reset();
+   for (auto volumeDataPageAccessor = m_volumeDataPageAccessorList.GetFirstItem(); volumeDataPageAccessor; volumeDataPageAccessor = volumeDataPageAccessor->m_volumeDataPageAccessorListNode.m_next)
+   {
+     volumeDataPageAccessor->Invalidate();
+   }
++  m_requestProcessor.reset();
+ }
+ 
+ void
 @@ -370,6 +372,9 @@ VolumeDataAccessManagerImpl::CreateVolumeDataPageAccessor(VolumeDataLayer const
      }
    }
