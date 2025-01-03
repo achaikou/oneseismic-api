@@ -18,6 +18,8 @@ ARG OPENVDS_VERSION=3.4.5
 WORKDIR /
 RUN git clone --depth 1 --branch ${OPENVDS_VERSION} https://community.opengroup.org/osdu/platform/domain-data-mgmt-services/seismic/open-vds.git
 WORKDIR /open-vds
+COPY patches/0001-Delete-pages.patch .
+RUN git apply 0001-Delete-pages.patch
 
 # for performance reasons open-vds should be build and run with new openssl
 # libssl is installed on alpine by default and would be used during runtime
