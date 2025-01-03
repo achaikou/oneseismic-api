@@ -1,15 +1,40 @@
-From 046a70783acffbb93f840da3602b1d2e894fe175 Mon Sep 17 00:00:00 2001
-Message-ID: <046a70783acffbb93f840da3602b1d2e894fe175.1735916919.git.alec@equinor.com>
+From f32bd2b9f79c4b9bff109ada552d5d2115c16985 Mon Sep 17 00:00:00 2001
+Message-ID: <f32bd2b9f79c4b9bff109ada552d5d2115c16985.1735918779.git.alec@equinor.com>
 From: Alena Chaikouskaya <alec@equinor.com>
 Date: Fri, 3 Jan 2025 14:07:05 +0100
 Subject: [PATCH] Delete pages
 
 ---
+ src/OpenVDS/OpenVDS/VolumeDataAccessManager.h   |  6 +++++-
  src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp |  4 ++++
  src/OpenVDS/VDS/VolumeDataAccessor.cpp          |  2 ++
  src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp  | 10 ++++++++++
- 3 files changed, 16 insertions(+)
+ 4 files changed, 21 insertions(+), 1 deletion(-)
 
+diff --git a/src/OpenVDS/OpenVDS/VolumeDataAccessManager.h b/src/OpenVDS/OpenVDS/VolumeDataAccessManager.h
+index 284d6cb0..998a87bd 100644
+--- a/src/OpenVDS/OpenVDS/VolumeDataAccessManager.h
++++ b/src/OpenVDS/OpenVDS/VolumeDataAccessManager.h
+@@ -27,6 +27,7 @@
+ #include <OpenVDS/Exceptions.h>
+ 
+ #include <memory>
++#include <iostream>
+ 
+ namespace OpenVDS {
+ 
+@@ -1052,7 +1053,10 @@ public:
+   {
+     EnsureValid();
+     auto volumeDataAccessManagerInterface = (m_IVolumeDataAccessManager->AddRef(), m_IVolumeDataAccessManager);
+-    return std::shared_ptr<VolumeDataPageAccessor>(m_IVolumeDataAccessManager->CreateVolumeDataPageAccessor(dimensionsND, LOD, channel, maxPages, accessMode, chunkMetadataPageSize), [volumeDataAccessManagerInterface](VolumeDataPageAccessor *volumeDataPageAccessor) { if(volumeDataPageAccessor->RemoveReference() == 0) volumeDataAccessManagerInterface->DestroyVolumeDataPageAccessor(volumeDataPageAccessor); volumeDataAccessManagerInterface->Release(); });
++    return std::shared_ptr<VolumeDataPageAccessor>(
++      m_IVolumeDataAccessManager->CreateVolumeDataPageAccessor(dimensionsND, LOD, channel, maxPages, accessMode, chunkMetadataPageSize), 
++      [volumeDataAccessManagerInterface](VolumeDataPageAccessor *volumeDataPageAccessor) {std::cout << "Checking if access manager can be deleted " << std::endl; if(volumeDataPageAccessor->RemoveReference() == 0) volumeDataAccessManagerInterface->DestroyVolumeDataPageAccessor(volumeDataPageAccessor); volumeDataAccessManagerInterface->Release(); }
++    );
+   }
+ 
+   //-----------------------------------------------------------------------------
 diff --git a/src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp b/src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp
 index a28a52e9..f564b671 100644
 --- a/src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp
@@ -40,7 +65,7 @@ index a28a52e9..f564b671 100644
    VolumeDataPageAccessorImpl *pageAccessor = static_cast<VolumeDataPageAccessorImpl *>(volumeDataPageAccessor);
    m_volumeDataPageAccessorList.Remove(pageAccessor);
 diff --git a/src/OpenVDS/VDS/VolumeDataAccessor.cpp b/src/OpenVDS/VDS/VolumeDataAccessor.cpp
-index c6b69df5..d033a565 100644
+index c6b69df5..78774c01 100644
 --- a/src/OpenVDS/VDS/VolumeDataAccessor.cpp
 +++ b/src/OpenVDS/VDS/VolumeDataAccessor.cpp
 @@ -27,6 +27,7 @@
@@ -55,7 +80,7 @@ index c6b69df5..d033a565 100644
      m_currentPage->Release();
      m_currentPage = nullptr;
    }
-+  std::cout << "Volume Data Accessor base" << std::endl;
++  std::cout << "Volume Data Accessor base destructor" << std::endl;
    if(m_volumeDataPageAccessor)
    {
      if(m_volumeDataPageAccessor->RemoveReference() == 0)
