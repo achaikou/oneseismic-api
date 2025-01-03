@@ -1,5 +1,5 @@
-From a3ef52d26bfc79b6d86c3dc49b7f00e81db4226f Mon Sep 17 00:00:00 2001
-Message-ID: <a3ef52d26bfc79b6d86c3dc49b7f00e81db4226f.1735922940.git.alec@equinor.com>
+From b117d0e9bd9d57e8d86da92b1fb1e9443360d206 Mon Sep 17 00:00:00 2001
+Message-ID: <b117d0e9bd9d57e8d86da92b1fb1e9443360d206.1735924653.git.alec@equinor.com>
 From: Alena Chaikouskaya <alec@equinor.com>
 Date: Fri, 3 Jan 2025 14:07:05 +0100
 Subject: [PATCH] Delete pages
@@ -9,7 +9,8 @@ Subject: [PATCH] Delete pages
  src/OpenVDS/VDS/VolumeDataAccessManagerImpl.cpp |  8 ++++++++
  src/OpenVDS/VDS/VolumeDataAccessor.cpp          |  2 ++
  src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp  | 10 ++++++++++
- 4 files changed, 27 insertions(+), 1 deletion(-)
+ src/OpenVDS/VDS/VolumeDataRequestProcessor.cpp  |  9 +++++++++
+ 5 files changed, 36 insertions(+), 1 deletion(-)
 
 diff --git a/src/OpenVDS/OpenVDS/VolumeDataAccessManager.h b/src/OpenVDS/OpenVDS/VolumeDataAccessManager.h
 index 284d6cb0..b5e1b2d0 100644
@@ -153,6 +154,47 @@ index 78b9c86a..d51fba06 100644
  
    if(m_parentVolumeDataPageAccessor)
    {
+diff --git a/src/OpenVDS/VDS/VolumeDataRequestProcessor.cpp b/src/OpenVDS/VDS/VolumeDataRequestProcessor.cpp
+index f795dbe7..541454f0 100644
+--- a/src/OpenVDS/VDS/VolumeDataRequestProcessor.cpp
++++ b/src/OpenVDS/VDS/VolumeDataRequestProcessor.cpp
+@@ -40,6 +40,7 @@
+ 
+ #include <fmt/format.h>
+ #include <exception>
++#include <iostream>
+ 
+ namespace OpenVDS
+ {
+@@ -1699,6 +1700,7 @@ static void CleanupThread(PageAccessorNotifier &pageAccessorNotifier,  std::map<
+ {
+   auto long_block = std::chrono::hours(24 * 32 * 12);
+   auto in_progress_block = std::chrono::seconds(_cleanupthread_timeoutseconds);
++  std::cout << "Cleanup thread created" << std::endl;
+   while(!pageAccessorNotifier.exit)
+   {
+     std::unique_lock<std::mutex> lock(pageAccessorNotifier.mutex);
+@@ -1749,6 +1751,12 @@ VolumeDataRequestProcessor::~VolumeDataRequestProcessor()
+     job->cancelled = true;
+   m_pageAccessorNotifier.setExit();
+   m_cleanupThread.join();
++  std::cout << "I am trying to delete something, not sure what" << std::endl;
++  for (auto& accessor : m_pageAccessors)
++  {
++    delete accessor.second;
++  }
++  m_pageAccessors.clear();
+ }
+ 
+ static int64_t GenJobId()
+@@ -1847,6 +1855,7 @@ int64_t VolumeDataRequestProcessor::AddJob(const std::vector<VolumeDataChunk>& c
+   auto page_accessor_it = m_pageAccessors.find(key);
+   if (page_accessor_it == m_pageAccessors.end())
+   {
++    std::cout << "So you are created in job" << std::endl;
+     auto pa = m_manager.CreateVolumeDataPageAccessorConversionParam(dimensions, lod, channel, format, noValue.first, noValue.second, maxPages, VolumeDataAccessManager::AccessMode_ReadOnly, 1024);
+     pa->RemoveReference();
+     auto insert_result = m_pageAccessors.emplace(key, pa);
 -- 
 2.43.0
 
