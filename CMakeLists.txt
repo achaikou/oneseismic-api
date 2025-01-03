@@ -19,6 +19,7 @@ if(GTEST)
 endif()
 
 if(MEMORYTEST)
+    list(APPEND CMAKE_CTEST_ARGUMENTS "--verbose")
     enable_testing()
     add_subdirectory(tests/memory)
 endif()
