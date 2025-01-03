@@ -1,18 +1,33 @@
-From 2b75ddd19a3419833537ca0fd26b1b5da202fb62 Mon Sep 17 00:00:00 2001
-Message-ID: <2b75ddd19a3419833537ca0fd26b1b5da202fb62.1735913441.git.alec@equinor.com>
+From f98684eda15e15593d759b96a9aea17501d59c88 Mon Sep 17 00:00:00 2001
+Message-ID: <f98684eda15e15593d759b96a9aea17501d59c88.1735913969.git.alec@equinor.com>
 From: Alena Chaikouskaya <alec@equinor.com>
 Date: Fri, 3 Jan 2025 14:07:05 +0100
 Subject: [PATCH] Delete pages
 
 ---
- src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp | 7 +++++++
- 1 file changed, 7 insertions(+)
+ src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp b/src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp
-index 78b9c86a..5ad76af1 100644
+index 78b9c86a..d51fba06 100644
 --- a/src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp
 +++ b/src/OpenVDS/VDS/VolumeDataPageAccessorImpl.cpp
-@@ -74,6 +74,13 @@ VolumeDataPageAccessorImpl::~VolumeDataPageAccessorImpl()
+@@ -34,6 +34,7 @@
+ #include <algorithm>
+ 
+ #include <fmt/printf.h>
++#include <iostream>
+ 
+ namespace OpenVDS
+ {
+@@ -68,12 +69,21 @@ VolumeDataPageAccessorImpl::VolumeDataPageAccessorImpl(VolumeDataAccessManagerIm
+ 
+ VolumeDataPageAccessorImpl::~VolumeDataPageAccessorImpl()
+ {
++  std::cout << "De-struc-tor!! De-struc-tor!" << std::endl;
+   m_pages.clear();
+   while(auto page = m_pages_lru.GetFirstItem())
+   {
      m_pages_lru.Remove(page);
      delete page;
    }
@@ -20,9 +35,10 @@ index 78b9c86a..5ad76af1 100644
 +  {
 +    if (it->second)
 +    {
-+      throw std::runtime_error("Page not deleted");
++      std::cerr << "Page not deleted" << std::endl;
 +    }
 +  }
++  std::cout << "Delete iteration over" << std::endl;
  
    if(m_parentVolumeDataPageAccessor)
    {
