@@ -13,7 +13,7 @@ def generate_account_signature(
     """
     Create account signature for azure request
     """
-    expiry = datetime.datetime.utcnow() + datetime.timedelta(seconds=lifespan)
+    expiry = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=lifespan)
     if permission == None:
         permission = blob.AccountSasPermissions(read=True)
     if resource_types == None:
@@ -37,7 +37,7 @@ def generate_container_signature(
     """
     Create container signature for azure request
     """
-    expiry = datetime.datetime.utcnow() + datetime.timedelta(seconds=lifespan)
+    expiry = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=lifespan)
     if permission == None:
         permission = blob.ContainerSasPermissions(read=True)
 
@@ -61,7 +61,7 @@ def generate_directory_signature(
     Create directory signature for azure request
     """
     from azure.storage import filedatalake
-    expiry = datetime.datetime.utcnow() + datetime.timedelta(seconds=lifespan)
+    expiry = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=lifespan)
     if permission == None:
         permission = filedatalake.FileSasPermissions(read=True)
 
@@ -85,7 +85,7 @@ def generate_blob_signature(
     """
     Create blob signature for azure request
     """
-    expiry = datetime.datetime.utcnow() + datetime.timedelta(seconds=lifespan)
+    expiry = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=lifespan)
     if permission == None:
         permission = blob.BlobSasPermissions(read=True)
 
