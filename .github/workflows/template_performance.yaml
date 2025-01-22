@@ -24,7 +24,7 @@ on:
         required: false
         type: string
       script_duration:
-        description: "For how long script should be run"
+        description: "For how long script should be run in string form (like 1h, 20m or 600s)"
         required: false
         type: string
       iteration_sleep_seconds:
