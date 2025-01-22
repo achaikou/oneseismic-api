@@ -19,7 +19,7 @@ on:
         description: "File to run in form /tests/performance/script.js"
         required: true
       script_duration:
-        description: "For how long script should be run (string form)"
+        description: "For how long script should be run in string form (like 1h, 20m or 600s)"
         required: false
       iteration_sleep_seconds:
         description: "How long (s) to sleep between iterations"
