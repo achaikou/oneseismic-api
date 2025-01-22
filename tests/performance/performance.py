@@ -12,7 +12,7 @@ def calculate_expected_script_runtime():
     minutes and hours.
     """
     default_duration = 600
-    duration = os.environ["SCRIPT_DURATION"]
+    duration = os.getenv("SCRIPT_DURATION",  str(default_duration)+"s")
     match = re.match(r"(\d+)([smh])", duration)
     if not match:
         print("Script duration cannot be parsed, using default value")

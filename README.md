@@ -150,11 +150,10 @@ To locally run a file `<chosen_script>.js` from the suite:
     ```
 4. Set all required environment variables
     ```
-    # set the 3 following variables needed to create sas
+    # set the 2 following variables needed to create sas
 
     export STORAGE_ACCOUNT_NAME=<storage account name>
     export STORAGE_ACCOUNT_KEY="<storage account key>"
-    export SCRIPT_DURATION=<validity of the sas token (seconds) - if unset, default is used>
 
     # or instead provide SAS itself
 
