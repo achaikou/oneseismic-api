@@ -1,12 +1,12 @@
 name: IaC and container image scans
-description: "Scan IaC configuration files and the generated Docker image for \
-vulnerabilities."
+description: "Scan IaC configuration files and the generated Docker image for
+  vulnerabilities."
 
 inputs:
   upload_to_ghas:
     description: "Upload to GHAS if true, otherwise report in Action"
   scan_type:
-    description: "Scan type"
+    description: "Scan type. Options: 'config' or 'image'"
   image_name:
     description: Name of image to scan if scan_type is 'image'"
     required: false

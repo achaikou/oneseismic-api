@@ -23,7 +23,7 @@ env:
 
 jobs:
   iac_file_scan:
-    name: Scan inftrastructure-as-code config files
+    name: Scan infrastructure-as-code config files
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -45,7 +45,7 @@ jobs:
   container_image_scan:
     name: Scan Docker image
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     if: ${{ github.event_name != 'pull_request' }}
 
     permissions:
